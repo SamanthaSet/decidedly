@@ -1,0 +1,59 @@
+
+
+<!-- Validation failure messages -->
+<% if @factor.errors.any? %>
+  <% @factor.errors.full_messages.each do |message| %>
+    <div class="alert alert-dismissable alert-danger">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="page-header">
+  <h3>Add Factor</h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <form action="/create_factor" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for decision_id -->
+      <div class="form-group">
+        <label for="decision_id" class="control-label">
+          Decision
+        </label>
+
+        <input type="text" id="decision_id" name="decision_id" placeholder="Decision" class="form-control" value="<%= @factor.decision_id %>">
+      </div>
+
+      <input type="text" name="user_id" value="<%= current_user.id %>">
+
+      <!-- Label and input for factor_name -->
+      <div class="form-group">
+        <label for="factor_name" class="control-label">
+          Factor name
+        </label>
+
+        <textarea id="factor_name" name="factor_name" placeholder="Factor name" class="form-control" rows="3"><%= @factor.factor_name %></textarea>
+      </div>
+
+      <!-- Label and input for ranking -->
+      <div class="form-group">
+        <label for="ranking" class="control-label">
+          Ranking
+        </label>
+
+        <input type="text" id="ranking" name="ranking" placeholder="Ranking" class="form-control" value="<%= @factor.ranking %>">
+      </div>
+
+      <button class="btn btn-success">
+        Create Factor
+      </button>
+      or
+      <a href="/factors">Cancel</a>
+    </form>
+  </div>
+</div>

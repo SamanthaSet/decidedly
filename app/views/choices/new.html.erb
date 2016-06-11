@@ -1,0 +1,48 @@
+<!-- Validation failure messages -->
+<% if @choice.errors.any? %>
+  <% @choice.errors.full_messages.each do |message| %>
+    <div class="alert alert-dismissable alert-danger">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="page-header">
+  <h3>Add Choice</h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <form action="/create_choice" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for decision_id -->
+      <div class="form-group">
+        <label for="decision_id" class="control-label">
+          Decision
+        </label>
+
+        <input type="text" id="decision_id" name="decision_id" placeholder="Decision" class="form-control" value="<%= @choice.decision_id %>">
+      </div>
+
+      <input type="text" name="user_id" value="<%= current_user.id %>">
+
+      <!-- Label and input for choice_name -->
+      <div class="form-group">
+        <label for="choice_name" class="control-label">
+          Choice name
+        </label>
+
+        <textarea id="choice_name" name="choice_name" placeholder="Choice name" class="form-control" rows="3"><%= @choice.choice_name %></textarea>
+      </div>
+
+      <button class="btn btn-success">
+        Create Choice
+      </button>
+      or
+      <a href="/choices">Cancel</a>
+    </form>
+  </div>
+</div>

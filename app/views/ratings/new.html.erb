@@ -1,0 +1,56 @@
+
+<!-- Validation failure messages -->
+<% if @rating.errors.any? %>
+  <% @rating.errors.full_messages.each do |message| %>
+    <div class="alert alert-dismissable alert-danger">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="page-header">
+  <h3>Add Rating</h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <form action="/create_rating" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for choice_id -->
+      <div class="form-group">
+        <label for="choice_id" class="control-label">
+          Choice
+        </label>
+
+        <input type="text" id="choice_id" name="choice_id" placeholder="Choice" class="form-control" value="<%= @rating.choice_id %>">
+      </div>
+
+      <!-- Label and input for factor_id -->
+      <div class="form-group">
+        <label for="factor_id" class="control-label">
+          Factor
+        </label>
+
+        <input type="text" id="factor_id" name="factor_id" placeholder="Factor" class="form-control" value="<%= @rating.factor_id %>">
+      </div>
+
+      <!-- Label and input for value -->
+      <div class="form-group">
+        <label for="value" class="control-label">
+          Value
+        </label>
+
+        <input type="text" id="value" name="value" placeholder="Value" class="form-control" value="<%= @rating.value %>">
+      </div>
+
+      <button class="btn btn-success">
+        Create Rating
+      </button>
+      or
+      <a href="/ratings">Cancel</a>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<% if current_user.id == @rating.choice.decision.user.id %>
+
+<!-- Validation failure messages -->
+<% if @rating.errors.any? %>
+  <% @rating.errors.full_messages.each do |message| %>
+    <div class="alert alert-dismissable alert-danger">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="page-header">
+  <h3>Edit Rating for <%= @rating.choice.choice_name %> <%= @rating.factor.factor_name %></h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <form action="/update_rating/<%= @rating.id %>" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for choice_id -->
+        <input type="hidden" id="choice_id" name="choice_id" placeholder="Choice" class="form-control" value="<%= @rating.choice_id %>">
+
+
+      <!-- Label and input for factor_id -->
+        <input type="hidden" id="factor_id" name="factor_id" placeholder="Factor" class="form-control" value="<%= @rating.factor_id %>">
+
+      <!-- Label and input for value -->
+      <div class="form-group">
+        <input type="text" id="value" name="value" placeholder="Value" class="form-control" value="<%= @rating.value %>">
+      </div>
+
+      <button class="btn btn-warning">
+        Update Rating
+      </button>
+    </form>
+  </div>
+</div>
+
+<% end %>

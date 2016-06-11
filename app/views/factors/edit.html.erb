@@ -1,0 +1,53 @@
+<% if current_user.id == @factor.decision.user.id %>
+
+<!-- Validation failure messages -->
+<% if @factor.errors.any? %>
+  <% @factor.errors.full_messages.each do |message| %>
+    <div class="alert alert-dismissable alert-danger">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="page-header">
+  <h3>Update Factor Name</h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <form action="/update_factor/<%= @factor.id %>" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for decision_id -->
+        <input type="hidden" id="decision_id" name="decision_id" placeholder="Decision" class="form-control" value="<%= @factor.decision_id %>">
+
+      <!-- Label and input for factor_name -->
+      <div class="form-group">
+        <label for="factor_name" class="control-label">
+          Factor name
+        </label>
+
+        <input type="text" id="factor_name" name="factor_name" placeholder="Factor name" class="form-control" value="<%= @factor.factor_name %>">
+      </div>
+
+      <!-- Label and input for ranking -->
+      <div class="form-group">
+        <label for="ranking" class="control-label">
+          Ranking
+        </label>
+
+        <input type="text" id="ranking" name="ranking" placeholder="Ranking" class="form-control" value="<%= @factor.ranking %>">
+      </div>
+
+      <button class="btn btn-warning">
+        Update Factor
+      </button>
+      or
+      <a href="/decisions/<%= @factor.decision_id %>">Cancel</a>
+    </form>
+  </div>
+</div>
+
+<% end %>

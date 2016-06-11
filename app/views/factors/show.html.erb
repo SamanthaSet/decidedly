@@ -1,0 +1,36 @@
+<% if current_user.id == @factor.decision.user.id %>
+
+
+<div class="page-header">
+  <h3>Factor #<%= @factor.id %></h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <dl class="dl-horizontal">
+      <dt>Decision</dt>
+      <dd><%= @factor.decision_id %></dd>
+
+      <dt>Factor name</dt>
+      <dd><%= @factor.factor_name %></dd>
+
+      <dt>Ranking</dt>
+      <dd><%= @factor.ranking %></dd>
+
+    </dl>
+
+    <div class="btn-group btn-group-justified">
+      <a href="/factors" class="btn btn-primary">
+        Back
+      </a>
+      <a href="/factors/<%= @factor.id %>/edit" class="btn btn-warning">
+        Edit
+      </a>
+      <a href="/delete_factor/<%= @factor.id %>" class="btn btn-danger" rel="nofollow">
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
+
+<% end %>

@@ -1,0 +1,62 @@
+<% if current_user.id == @choice.decision.user.id %>
+
+
+<div class="page-header">
+  <h3>Your Ratings for <%= @choice.choice_name %></h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+
+
+    <table>
+      <% Factor.where(:decision_id => @choice.decision_id).each do |factor| %>
+      <tr>
+        <th>
+          How would you rate <%= @choice.choice_name %> on <%= factor.factor_name %>?
+        </th>
+      </tr>
+
+      <% if Rating.where(:choice_id => @choice.id, :factor_id => factor.id).count == 0 %>
+
+      <tr>
+        <td>
+          <form action="/create_rating" method="post">
+            <!-- Hidden input for authenticity token to protect from forgery -->
+            <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+            <input type="hidden" id="choice_id" name="choice_id" placeholder="Choice" class="form-control" value="<%= @choice.id %>">
+
+            <input type="hidden" id="factor_id" name="factor_id" placeholder="Factor" class="form-control" value="<%= factor.id %>">
+
+            <!-- Label and input for value -->
+            <div class="form-inline">
+              <input type="text" id="value" name="value" placeholder="0-100" class="form-control">
+            </div>
+          </form>
+        </td>
+      </tr>
+
+      <% elsif Rating.where(:choice_id => @choice.id, :factor_id => factor.id).each do |rating| %>
+
+      <tr>
+        <td><%= rating.value %></td>
+      </tr>
+
+      <% end %>
+      <% end %>
+
+      <% end %>
+
+    </table>
+
+
+    <div class="btn-group">
+      <a href="/decisions/<%= @choice.decision.id %>" class="btn btn-primary">
+        Back to Decision Analysis
+      </a>
+    </div>
+  </div>
+</div>
+
+<% end %>

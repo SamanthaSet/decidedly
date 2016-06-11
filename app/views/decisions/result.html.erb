@@ -1,0 +1,50 @@
+
+<% if current_user.id == @decision.user.id %>
+<div class="page-header">
+  <h3>Your results are in! We analyzed your responses to the decision: "<%= @decision.description %>" and here are your adjusted scores. </h3>
+
+  <p><h4>The higher the score, the higher your preference is for that choice.</h4></p>
+</div>
+
+<hr>
+
+<% sum = 0.0 %>
+<% @decision.factors.each do |factor| %>
+<% sum = sum + factor.ranking.to_f %>
+<% end %>
+
+  <% @decision.choices.each do |choice| %>
+  <% choice_sum = 0.0 %>
+  Your weighted ratings for <%= choice.choice_name %> were as follows:
+    <% choice.ratings.each do |rating| %>
+    <% choice_sum = choice_sum + (rating.value.to_f * rating.factor.ranking.to_f/sum) %>
+    <% choice_sum = choice_sum.round(2) %>
+    <% value = rating.value.to_f * rating.factor.ranking.to_f/sum %>
+    <ul>
+      <li >
+        For the factor "<%= rating.factor.factor_name %>": <%= value.round(2) %>.
+      </li>
+    </ul>
+    <% end %>
+<div>
+  <p><h4>Thus, your total adjusted score for <%= choice.choice_name %> is <%= choice_sum.to_s %>.</h4>
+  </p>
+</div>
+<hr>
+
+<% end %>
+
+
+
+<hr>
+
+<div class="btn-group">
+  <a href="/decisions/<%= @decision.id %>" class="btn btn-warning">
+    Back to decision analysis
+  </a>
+
+  <a href="/decisions/" class="btn btn-primary">
+    Back to my list of decisions
+  </a>
+</div>
+<% end %>

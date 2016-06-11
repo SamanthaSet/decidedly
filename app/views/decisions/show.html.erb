@@ -1,0 +1,149 @@
+
+<% if current_user.id == @decision.user.id %>
+
+<hr>
+
+<div class="btn-group">
+  <a href="/decisions" class="btn btn-primary">
+    Back to my list of decisions
+  </a>
+</div>
+
+<div class="page-header">
+  <h3>Looks like you need help with the decision: "<%= @decision.description %>"</h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+
+    <h4>Step 1) Enter the choices you are considering.</h4>
+
+    <form action="/create_choice" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for decision_id and user id-->
+      <input type="hidden" id="decision_id" name="decision_id" placeholder="Decision" class="form-control" value="<%= @decision.id %>">
+
+      <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+      <!-- Label and input for choice_name -->
+      <div class="form-group">
+        <input type="text" id="choice_name" name="choice_name" placeholder="To add a new choice, type it in here and then hit enter" class="form-control" required>
+      </div>
+    </form>
+
+    <h4>Your choices:</h4>
+    <ol>
+      <% @decision.choices.each do |choice| %>
+      <li><%= choice.choice_name %>
+        <a href="/choices/<%= choice.id %>/edit"><i class="fa fa-pencil"></i>
+        </a>
+        <a href="/delete_choice/<%= choice.id %>"><i class="fa fa-trash"></i></a>
+      </li>
+      <% end %>
+    </ol>
+
+  <hr>
+
+    <h4>Step 2) Enter the factors you are using to evaluate your choices.</h4>
+
+    <form action="/create_factor" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for decision_id and user id-->
+      <input type="hidden" id="decision_id" name="decision_id" placeholder="Decision" class="form-control" value="<%= @decision.id %>">
+
+      <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+      <!-- Label and input for choice_name -->
+      <div class="form-group">
+        <input type="text" id="factor_name" name="factor_name" placeholder="Add a factor" class="form-control" required>
+      </div>
+    </form>
+
+    <h4>Your evaluation factors:</h4>
+    <ol>
+      <% @decision.factors.each do |factor| %>
+      <li><%= factor.factor_name %>
+        <a href="/factors/<%= factor.id %>/edit"><i class="fa fa-pencil"></i></a>
+        <a href="/delete_factor/<%= factor.id %>"><i class="fa fa-trash"></i></a>
+      </li>
+      <% end %>
+    </ol>
+
+    <hr>
+
+    <h4>Step 3) Rate how important each evaluation factor is to you by entering a number between 0 and 100 (0 = I don't even know why I am considering this factor, 100 = This factor could make it or break it).</h4>
+    <ol>
+      <% @decision.factors.each do |factor| %>
+      <li>How important is <%= factor.factor_name %> to you?
+
+        <% if factor.ranking == nil %>
+        <form action="/update_factor/<%= factor.id %>" method="post">
+          <!-- Hidden input for authenticity token to protect from forgery -->
+          <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+          <input type="hidden" id="decision_id" name="decision_id" placeholder="Decision" class="form-control" value="<%= factor.decision_id %>">
+
+          <input type="hidden" id="factor_name" name="factor_name" placeholder="Factor name" class="form-control" value="<%= factor.factor_name %>">
+
+          <!-- Label and input for ranking -->
+          <div class="form-inline">
+            <input type="text" id="ranking" name="ranking" placeholder="Ranking" class="form-control" value="<%= factor.ranking %>">
+          </div>
+        </form>
+
+        <% else %>
+        <div><%= factor.ranking %>
+          <a href="/factors/<%= factor.id %>/edit">
+            <i class="fa fa-pencil"></i>
+          </a>
+        </div>
+        <% end %>
+      </li>
+      <% end %>
+    </ol>
+
+    <hr>
+
+    <h4>Step 4) For each of your choices, rate how well you feel each choice measures up to each of your evaluation factors by entering a number between 0 and 100 (0 = the absolute worst, 100 = the best ever)</h4>
+
+
+    <ol>
+      <% @decision.choices.each do |choice| %>
+      <li>
+        <a href="/choices/<%= choice.id %>">Rate "<%= choice.choice_name %>" against your evaluation factors or update your ratings</a>
+      </li>
+
+      Your raw ratings for <%= choice.choice_name %>:
+        <% choice.ratings.each do |rating| %>
+        <ul>
+          <li>
+            <%= rating.choice.choice_name %> <%= rating.factor.factor_name %>: <%= rating.value %>
+            <a href="/ratings/<%= rating.id %>/edit"><i class="fa fa-pencil"></i></a>
+          </li>
+        </ul>
+      <% end %>
+      <% end %>
+    </ol>
+
+    <hr>
+
+    <div class="btn-group-justified btn-block">
+      <a href="/decisions/result/<%= @decision.id %>" class="btn btn-success btn-lg">
+        See results!
+      </a>
+    </div>
+
+    <hr>
+
+        <div class="btn-group">
+          <a href="/decisions" class="btn btn-primary">
+            Back to my list of decisions
+          </a>
+        </div>
+      </div>
+    </div>
+<% end %>
